@@ -17,5 +17,17 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Run google-java-format
+        uses: axel-op/googlejavaformat-action@v3
+        with:
+          version: v1.17.0
+          args: "--replace"
+          skip-commit: true
+
+      - name: Check if google-java-format changed anything
+        run: git --no-pager diff --exit-code
+
       - name: Execute Gradle build
         uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
