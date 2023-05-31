@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class AsynchronousOperationTest {
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "OperationDelay: {0}ms")
   @ValueSource(longs = {50, 60, 40, 200})
   void runAsynchronousOperationWithSleep(long delay) {
     final var asyncOperation = new AsynchronousOperation(Duration.ofMillis(delay));
@@ -28,7 +28,7 @@ class AsynchronousOperationTest {
         .until(asyncOperation::isCompleted);
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "OperationDelay: {0}ms")
   @ValueSource(longs = {50, 60, 40, 200})
   void runAsynchronousOperationWithAwaitility(long delay) throws InterruptedException {
     final var asyncOperation = new AsynchronousOperation(Duration.ofMillis(delay));
