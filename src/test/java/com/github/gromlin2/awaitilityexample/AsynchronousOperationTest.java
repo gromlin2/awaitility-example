@@ -12,15 +12,15 @@ class AsynchronousOperationTest {
 
   @ParameterizedTest(name = "OperationDelay: {0}ms")
   @ValueSource(longs = {50, 60, 40, 200})
-  void runAsynchronousOperationWithSleep(long delay) {
+  void runAsynchronousOperationWithAwaitility(long delay) {
     final var asyncOperation = new AsynchronousOperation(Duration.ofMillis(delay));
 
-    assertFalse(asyncOperation.isStarted());
-    assertFalse(asyncOperation.isCompleted());
+    assertFalse(asyncOperation.isStarted(), "Should not be started before run is called.");
+    assertFalse(asyncOperation.isCompleted(), "Should not be completed before run is called.");
 
     asyncOperation.run();
-    assertTrue(asyncOperation.isStarted());
-    assertFalse(asyncOperation.isCompleted());
+    assertTrue(asyncOperation.isStarted(), "Should be started after run is called.");
+    assertFalse(asyncOperation.isCompleted(), "Should not be completed right away.");
 
     await("completion of task")
         .atMost(Duration.ofMillis(250))
@@ -30,18 +30,18 @@ class AsynchronousOperationTest {
 
   @ParameterizedTest(name = "OperationDelay: {0}ms")
   @ValueSource(longs = {50, 60, 40, 200})
-  void runAsynchronousOperationWithAwaitility(long delay) throws InterruptedException {
+  void runAsynchronousOperationWithSleep(long delay) throws InterruptedException {
     final var asyncOperation = new AsynchronousOperation(Duration.ofMillis(delay));
 
-    assertFalse(asyncOperation.isStarted());
-    assertFalse(asyncOperation.isCompleted());
+    assertFalse(asyncOperation.isStarted(), "Should not be started before run is called.");
+    assertFalse(asyncOperation.isCompleted(), "Should not be completed before run is called.");
 
     asyncOperation.run();
-    assertTrue(asyncOperation.isStarted());
-    assertFalse(asyncOperation.isCompleted());
+    assertTrue(asyncOperation.isStarted(), "Should be started after run is called.");
+    assertFalse(asyncOperation.isCompleted(), "Should not be completed right away.");
 
     Thread.sleep(250);
 
-    assertTrue(asyncOperation.isCompleted());
+    assertTrue(asyncOperation.isCompleted(), "Should be completed after 250ms.");
   }
 }

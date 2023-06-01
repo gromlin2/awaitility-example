@@ -14,6 +14,7 @@ public final class AsynchronousOperation {
   private final Duration duration;
 
   private Instant started = null;
+  private Instant completesAt = null;
 
   /**
    * Create a new operation, running for the specified duration.
@@ -28,6 +29,7 @@ public final class AsynchronousOperation {
   /** Starts the operation. */
   public void run() {
     started = Instant.now();
+    completesAt = started.plus(duration);
   }
 
   /**
@@ -50,6 +52,6 @@ public final class AsynchronousOperation {
       return false;
     }
 
-    return Instant.now().isAfter(started.plus(duration));
+    return Instant.now().isAfter(completesAt);
   }
 }
